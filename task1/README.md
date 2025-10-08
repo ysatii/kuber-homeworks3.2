@@ -273,9 +273,9 @@ kubectl get pods -A -o wide
 ![рисунок 11](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_11.jpg)  
 ----
 
-k8s-w3 (10.129.0.6)
+k8s-w3 (10.129.0.15)
 ```
-ssh -l lamer 51.250.23.243
+ssh -l lamer 84.201.154.155
 ```
 
 ```
@@ -292,7 +292,11 @@ sudo sysctl --system
 ```
 ```
 curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sudo sh -
+```
+```
 sudo mkdir -p /etc/rancher/rke2
+```
+```
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
 server: https://10.128.0.18:9345
 token: K10db64f6080d260611d38068f0dc09fcc5eeb7fe0505d8952514f19a83e3706856::server:f26e27b1cff1339a07224daa6b83b33e
