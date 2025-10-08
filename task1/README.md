@@ -275,7 +275,7 @@ kubectl get pods -A -o wide
 
 k8s-w3 (10.129.0.15)
 ```
-ssh -l lamer 84.201.154.155
+ssh -l lamer 89.169.164.192
 ```
 
 ```
@@ -298,8 +298,8 @@ sudo mkdir -p /etc/rancher/rke2
 ```
 ```
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
-server: https://10.128.0.18:9345
-token: K10db64f6080d260611d38068f0dc09fcc5eeb7fe0505d8952514f19a83e3706856::server:f26e27b1cff1339a07224daa6b83b33e
+server: https://10.130.0.25:9345
+token: K10d92839ebe7e26c54b06cff4c61a394d0701db0f38e6b453200b6aaa66cdcfe52::server:74d0ffe751f3231af67cd93157401fb8
 node-name: k8s-w3
 EOF
 sudo systemctl enable --now rke2-agent.service
@@ -309,4 +309,39 @@ sudo systemctl enable --now rke2-agent.service
 kubectl get nodes -o wide
 kubectl -n kube-system get pods -l k8s-app=canal -o wide
 kubectl get pods -A -o wide
+```
+
+![рисунок 12](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_12.jpg)  
+![рисунок 13](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_13.jpg)  
+![рисунок 14](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_14.jpg)  
+-----
+
+k8s-w4 (10.128.0.8)
+```
+ssh -l lamer 158.160.42.77
+```
+
+```
+sudo hostnamectl set-hostname k8s-w4
+sudo swapoff -a && sudo sed -ri '/\sswap\s/s/^/#/' /etc/fstab
+echo -e "br_netfilter\noverlay" | sudo tee /etc/modules-load.d/rke2.conf
+sudo modprobe br_netfilter && sudo modprobe overlay
+cat <<'EOF' | sudo tee /etc/sysctl.d/99-rke2.conf
+net.bridge.bridge-nf-call-iptables=1
+net.bridge.bridge-nf-call-ip6tables=1
+net.ipv4.ip_forward=1
+EOF
+sudo sysctl --system
+```
+
+```
+curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sudo sh -
+```
+sudo mkdir -p /etc/rancher/rke2
+sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
+server: https://10.130.0.25:9345
+token: K10d92839ebe7e26c54b06cff4c61a394d0701db0f38e6b453200b6aaa66cdcfe52::server:74d0ffe751f3231af67cd93157401fb8
+node-name: k8s-w4
+EOF
+sudo systemctl enable --now rke2-agent.service
 ```

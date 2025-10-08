@@ -49,29 +49,7 @@
 
 
 
-k8s-w4 (10.130.0.9)
 
-```
-sudo hostnamectl set-hostname k8s-w4
-sudo swapoff -a && sudo sed -ri '/\sswap\s/s/^/#/' /etc/fstab
-echo -e "br_netfilter\noverlay" | sudo tee /etc/modules-load.d/rke2.conf
-sudo modprobe br_netfilter && sudo modprobe overlay
-cat <<'EOF' | sudo tee /etc/sysctl.d/99-rke2.conf
-net.bridge.bridge-nf-call-iptables=1
-net.bridge.bridge-nf-call-ip6tables=1
-net.ipv4.ip_forward=1
-EOF
-sudo sysctl --system
-
-curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sudo sh -
-sudo mkdir -p /etc/rancher/rke2
-sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
-server: https://10.128.0.18:9345
-token: K10db64f6080d260611d38068f0dc09fcc5eeb7fe0505d8952514f19a83e3706856::server:f26e27b1cff1339a07224daa6b83b33e
-node-name: k8s-w4
-EOF
-sudo systemctl enable --now rke2-agent.service
-```
 
 ----
 
