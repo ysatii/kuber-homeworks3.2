@@ -66,5 +66,5 @@ kubectl get pods -A -o wide
 ```
 ![рисунок 17](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_17.jpg)  
 ![рисунок 18](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_18.jpg)  
-
+![рисунок 19](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_19.jpg)  
 
