@@ -337,6 +337,7 @@ sudo sysctl --system
 ```
 curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sudo sh -
 ```
+```
 sudo mkdir -p /etc/rancher/rke2
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
 server: https://10.130.0.25:9345
