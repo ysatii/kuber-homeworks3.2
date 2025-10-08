@@ -36,104 +36,15 @@
 
 
 
+ 
 
-1) Починим конфиг и укажем сокет containerd
-
-sudo tee /etc/crictl.yaml >/dev/null <<'EOF'
-runtime-endpoint: unix:///run/k3s/containerd/containerd.sock
-image-endpoint: unix:///run/k3s/containerd/containerd.sock
-timeout: 10
-debug: false
-EOF
-
-2) Запустим crictl из поставки RKE2 (полным путём)
-# проверить, что бинарь есть
-ls -l /var/lib/rancher/rke2/bin/crictl
-
-# выполнить команды через полный путь (обходит проблемы PATH у sudo)
-sudo /var/lib/rancher/rke2/bin/crictl info | grep -i runtimeType
-sudo /var/lib/rancher/rke2/bin/crictl ps -a | head
-
-
-Ожидаемо увидишь:
-
-"runtimeType": "containerd"
-
-
-и список контейнеров.
-
-(опционально) Чтобы sudo crictl ... работало без полного пути
-# разово для текущей сессии sudo
-sudo env "PATH=$PATH:/var/lib/rancher/rke2/bin" crictl info | grep -i runtimeType
-
-# или добавить в профиль пользователя (для несуперпользовательских вызовов)
-echo 'export PATH=$PATH:/var/lib/rancher/rke2/bin' >> ~/.bashrc && source ~/.bashrc
-
-
-Если что-то не сойдётся — пришли вывод:
-
-ls -l /var/lib/rancher/rke2/bin/crictl
-cat /etc/crictl.yaml
-sudo /var/lib/rancher/rke2/bin/crictl info
-
-
-Подключение worker-нод к RKE2 (CNI=canal, CRI=containerd)
-0) На мастере (если нужен токен ещё раз)
-sudo cat /var/lib/rancher/rke2/server/node-token
-
-
-Скопируй значение в <TOKEN> ниже.
-
-sudo cat /var/lib/rancher/rke2/server/node-token
-K10db64f6080d260611d38068f0dc09fcc5eeb7fe0505d8952514f19a83e3706856::server:f26e27b1cff1339a07224daa6b83b33e
 ------
 
 
-### 8s-w1 (10.129.0.4)
-```
-sudo hostnamectl set-hostname k8s-w1
-sudo swapoff -a && sudo sed -ri '/\sswap\s/s/^/#/' /etc/fstab
-echo -e "br_netfilter\noverlay" | sudo tee /etc/modules-load.d/rke2.conf
-sudo modprobe br_netfilter && sudo modprobe overlay
-cat <<'EOF' | sudo tee /etc/sysctl.d/99-rke2.conf
-net.bridge.bridge-nf-call-iptables=1
-net.bridge.bridge-nf-call-ip6tables=1
-net.ipv4.ip_forward=1
-EOF
-sudo sysctl --system
 
-# установка агента
-curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sudo sh -
-sudo mkdir -p /etc/rancher/rke2
-sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
-server: https://10.128.0.18:9345
-token: K10db64f6080d260611d38068f0dc09fcc5eeb7fe0505d8952514f19a83e3706856::server:f26e27b1cff1339a07224daa6b83b33e
-node-name: k8s-w1
-EOF
-sudo systemctl enable --now rke2-agent.service
-```
 
 ----
-k8s-w2 (10.130.0.7)
-sudo hostnamectl set-hostname k8s-w2
-sudo swapoff -a && sudo sed -ri '/\sswap\s/s/^/#/' /etc/fstab
-echo -e "br_netfilter\noverlay" | sudo tee /etc/modules-load.d/rke2.conf
-sudo modprobe br_netfilter && sudo modprobe overlay
-cat <<'EOF' | sudo tee /etc/sysctl.d/99-rke2.conf
-net.bridge.bridge-nf-call-iptables=1
-net.bridge.bridge-nf-call-ip6tables=1
-net.ipv4.ip_forward=1
-EOF
-sudo sysctl --system
 
-curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sudo sh -
-sudo mkdir -p /etc/rancher/rke2
-sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
-server: https://10.128.0.18:9345
-token: K10db64f6080d260611d38068f0dc09fcc5eeb7fe0505d8952514f19a83e3706856::server:f26e27b1cff1339a07224daa6b83b33e
-node-name: k8s-w2
-EOF
-sudo systemctl enable --now rke2-agent.service
 ----
 
 k8s-w3 (10.129.0.6)
