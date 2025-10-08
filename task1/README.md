@@ -158,22 +158,25 @@ kubectl -n kube-system get pods -l k8s-app=canal -o wide
 
 ### Проверка kubelet и CRI (containerd)
 systemctl status rke2-server | grep Active
-sudo crictl info | grep -i runtimeType
+crictl info | grep -i runtimeType
 ```
 ![рисунок 3](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_3.jpg)  
 ![рисунок 4](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_4.jpg)  
 
 
 ```bash
-7️⃣ Проверка Kubernetes API
+### Проверка Kubernetes API
 kubectl cluster-info
-kubectl version --short
+kubectl version --short0
 
-8️⃣ Проверка системных сервисов
+### Проверка системных сервисов
 kubectl get svc -A
 
-9️⃣ Проверка DNS внутри кластера
+### Проверка DNS внутри кластера
 kubectl run dns-test --image=busybox:1.28 --restart=Never -it -- nslookup kubernetes.default
 
-🔟 Проверка состояния компонентов
+### Проверка состояния компонентов
 kubectl get componentstatuses
+```
+![рисунок 5](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_5.jpg)  
+-----
