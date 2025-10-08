@@ -52,11 +52,19 @@ tls-san:
 write-kubeconfig-mode: "0644"
 EOF
 ```
+
 # 4. Запуск RKE2
 ```
 sudo systemctl enable --now rke2-server
 sudo journalctl -u rke2-server -f
 ```
 ------
+```
+kubectl get nodes -o wide
+kubectl -n kube-system get pods -l k8s-app=canal -o wide
+kubectl get pods -A -o wide
+```
+![рисунок 17](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_17.jpg)  
+![рисунок 18](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_18.jpg)  
 
 
