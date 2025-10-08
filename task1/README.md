@@ -104,6 +104,16 @@ kubectl -n kube-system get pods -o wide
 5. Проверка CRI и etcd
 ### Проверяем что используется containerd
 ```
+mkdir -p /etc/crictl.yaml
+tee /etc/crictl.yaml >/dev/null <<EOF
+runtime-endpoint: unix:///run/k3s/containerd/containerd.sock
+image-endpoint: unix:///run/k3s/containerd/containerd.sock
+timeout: 10
+debug: false
+EOF
+```
+
+```
 crictl info | grep -i runtimeType
 ```
 
@@ -112,7 +122,8 @@ crictl info | grep -i runtimeType
         "runtimeType": "io.containerd.runc.v2",
         "runtimeType": "io.containerd.runhcs.v1",
 ```
-----
+containerd присутвует !
+-----
 
 ### Проверяем работу etcd
 ```
@@ -128,3 +139,41 @@ sudo cat /var/lib/rancher/rke2/server/node-token
 -----
 ![рисунок 2](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_2.jpg)  
 
+### 1️⃣ Проверка состояния нод
+
+```bash
+### Проверка системных компонентов
+kubectl get pods -n kube-system -o wide
+
+
+### Проверка control-plane
+kubectl get pods -n kube-system -l tier=control-plane -o wide
+
+### Проверка etcd
+kubectl -n kube-system get pods -l component=etcd -o wide
+kubectl -n kube-system logs -l component=etcd --tail=20
+
+### Проверка CNI (Canal)
+kubectl -n kube-system get pods -l k8s-app=canal -o wide
+
+### Проверка kubelet и CRI (containerd)
+systemctl status rke2-server | grep Active
+sudo crictl info | grep -i runtimeType
+```
+![рисунок 3](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_3.jpg)  
+![рисунок 4](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_4.jpg)  
+
+
+```bash
+7️⃣ Проверка Kubernetes API
+kubectl cluster-info
+kubectl version --short
+
+8️⃣ Проверка системных сервисов
+kubectl get svc -A
+
+9️⃣ Проверка DNS внутри кластера
+kubectl run dns-test --image=busybox:1.28 --restart=Never -it -- nslookup kubernetes.default
+
+🔟 Проверка состояния компонентов
+kubectl get componentstatuses

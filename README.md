@@ -37,62 +37,6 @@
 
 
 
-
-
-7. конфиг crictl для RKE2:
-
-sudo mkdir -p /etc/crictl.yaml
-sudo tee /etc/crictl.yaml >/dev/null <<EOF
-runtime-endpoint: unix:///run/k3s/containerd/containerd.sock
-image-endpoint: unix:///run/k3s/containerd/containerd.sock
-timeout: 10
-debug: false
-EOF
-
-sudo crictl info | grep -i runtimeType
------
-
-
-# ✅ Проверка работоспособности кластера RKE2 (Kubernetes)
-
-
-## 1️⃣ Проверка состояния нод
-
-```bash
-kubectl get nodes -o wide
-
-2️⃣ Проверка системных компонентов
-kubectl get pods -n kube-system -o wide
-
-
-3️⃣ Проверка control-plane
-kubectl get pods -n kube-system -l tier=control-plane -o wide
-
-4️⃣ Проверка etcd
-kubectl -n kube-system get pods -l component=etcd -o wide
-kubectl -n kube-system logs -l component=etcd --tail=20
-
-5️⃣ Проверка CNI (Canal)
-kubectl -n kube-system get pods -l k8s-app=canal -o wide
-
-6️⃣ Проверка kubelet и CRI (containerd)
-systemctl status rke2-server | grep Active
-sudo crictl info | grep -i runtimeType
-
-7️⃣ Проверка Kubernetes API
-kubectl cluster-info
-kubectl version --short
-
-8️⃣ Проверка системных сервисов
-kubectl get svc -A
-
-9️⃣ Проверка DNS внутри кластера
-kubectl run dns-test --image=busybox:1.28 --restart=Never -it -- nslookup kubernetes.default
-
-🔟 Проверка состояния компонентов
-kubectl get componentstatuses
-
-
 1) Починим конфиг и укажем сокет containerd
 
 sudo tee /etc/crictl.yaml >/dev/null <<'EOF'
