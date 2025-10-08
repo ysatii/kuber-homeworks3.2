@@ -346,3 +346,16 @@ node-name: k8s-w4
 EOF
 sudo systemctl enable --now rke2-agent.service
 ```
+
+
+```
+kubectl get nodes -o wide
+kubectl -n kube-system get pods -l k8s-app=canal -o wide
+kubectl get pods -A -o wide
+```
+
+![рисунок 15](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_15.jpg)  
+![рисунок 16](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_16.jpg)  
+ 
+ -----
+ 
