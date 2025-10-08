@@ -30,104 +30,14 @@
 
 
 
-## ответ 1
-
-### Подготовка системы
-
-ssh -l lamer 62.84.113.3
 
 
-# Задать hostname
-sudo hostnamectl set-hostname k8s-m1
 
-# Отключить swap (требование Kubernetes)
-sudo swapoff -a
-sudo sed -ri '/\sswap\s/s/^/#/' /etc/fstab
 
-# Загрузить необходимые модули ядра
-cat <<'EOF' | sudo tee /etc/modules-load.d/rke2.conf
-br_netfilter
-overlay
-EOF
-sudo modprobe br_netfilter
-sudo modprobe overlay
 
-# Настройки сетевого стека
-cat <<'EOF' | sudo tee /etc/sysctl.d/99-rke2.conf
-net.bridge.bridge-nf-call-iptables = 1
-net.bridge.bridge-nf-call-ip6tables = 1
-net.ipv4.ip_forward = 1
-EOF
-sudo sysctl --system
 
------
 
-1. Установка RKE2 (Server)
-curl -sfL https://get.rke2.io | sudo sh -
-sudo systemctl enable rke2-server.service
 
------
-
-2. Настройка RKE2 (Master Config)
-sudo mkdir -p /etc/rancher/rke2
-sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
-# Название ноды
-node-name: k8s-m1
-
-# Разрешённые SAN'ы для TLS
-tls-san:
-  - 62.84.113.43        # публичный IP
-  - 10.128.0.18         # внутренний IP
-  - k8s-m1              # hostname
-
-# Явно указываем CNI
-cni: canal
-
-# Подсети кластера
-cluster-cidr: 10.42.0.0/16
-service-cidr: 10.43.0.0/16
-
-# Разрешаем чтение kubeconfig пользователем
-write-kubeconfig-mode: "0644"
-EOF
------
-
-3. Запуск кластера
-sudo systemctl start rke2-server.service
-sudo journalctl -u rke2-server -f
-
-дожидаемся строки 
-Started rke2-server.service - Rancher Kubernetes Engine v2
------
-
-4. Подключение kubectl и проверка состояния
-# Добавляем RKE2 бинарники в PATH
-echo 'export PATH=$PATH:/var/lib/rancher/rke2/bin' | tee -a ~/.bashrc
-source ~/.bashrc
-
-# kubeconfig для kubectl
-mkdir -p ~/.kube
-sudo cp /etc/rancher/rke2/rke2.yaml ~/.kube/config
-sudo chown $(id -u):$(id -g) ~/.kube/config
-
-# Проверяем состояние ноды и системных подов
-kubectl get nodes -o wide
-kubectl -n kube-system get pods -o wide
------
-
-5. Проверка CRI и etcd
-# Проверяем что используется containerd
-crictl info | grep -i runtimeType
-# Ожидаемый вывод:  "runtimeType": "containerd"
-
-# Проверяем работу etcd
-kubectl -n kube-system get pods -l component=etcd -o wide
------
-
-6. Получение токена для присоединения worker-нод
-sudo cat /var/lib/rancher/rke2/server/node-token
-
-сли хочешь, чтобы crictl тоже работал
 
 7. конфиг crictl для RKE2:
 
