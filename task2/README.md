@@ -8,7 +8,7 @@
 
 ## подключаем еще две мастер ноды к кластеру  
 Подключаем k8s-m2
-# 1. Базовая подготовка
+### 1. Базовая подготовка
 ```
 ssh -l lamer 158.160.198.74
 ```
@@ -25,7 +25,7 @@ EOF
 sudo sysctl --system
 ```
 
-# 2. Установка RKE2
+### 2. Установка RKE2
 ```
 curl -sfL https://get.rke2.io | sudo sh -
 ```
@@ -33,7 +33,7 @@ curl -sfL https://get.rke2.io | sudo sh -
 sudo mkdir -p /etc/rancher/rke2
 ```
 
-# 3. Конфиг кластера
+### 3. Конфиг кластера
 ```
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<'EOF'
 server: https://10.130.0.25:9345
@@ -53,7 +53,7 @@ write-kubeconfig-mode: "0644"
 EOF
 ```
 
-# 4. Запуск RKE2
+### 4. Запуск RKE2
 ```
 sudo systemctl enable --now rke2-server
 sudo journalctl -u rke2-server -f
@@ -73,7 +73,7 @@ kubectl get pods -A -o wide
 
 На k8s-m3 выполняем аналогично:
 
-# 1. Подготовка
+### 1. Подготовка
 ```
 ssh -l lamer 158.160.144.5
 ```
@@ -90,7 +90,7 @@ EOF
 sudo sysctl --system
 ```
 
-# 2. Установка RKE2
+### 2. Установка RKE2
 ```
 curl -sfL https://get.rke2.io | sudo sh -
 ```
@@ -98,7 +98,7 @@ curl -sfL https://get.rke2.io | sudo sh -
 sudo mkdir -p /etc/rancher/rke2
 ```
 
-# 3. Конфиг
+### 3. Конфиг
 ```
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<'EOF'
 server: https://10.130.0.25:9345
@@ -118,9 +118,17 @@ write-kubeconfig-mode: "0644"
 EOF
 ```
 
-# 4. Запуск
+### 4. Запуск
 ```
 sudo systemctl enable --now rke2-server
 sudo journalctl -u rke2-server -f
 ```
 
+```
+kubectl get nodes -o wide
+kubectl -n kube-system get pods -l k8s-app=canal -o wide
+kubectl get pods -A -o wide
+```
+
+![рисунок 20](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_20.jpg)  
+![рисунок 21](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_21.jpg)  
