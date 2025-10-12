@@ -206,10 +206,10 @@ sudo cat /var/lib/rancher/rke2/server/node-token
 
 ответ
 ``` 
-K10d92839ebe7e26c54b06cff4c61a394d0701db0f38e6b453200b6aaa66cdcfe52::server:74d0ffe751f3231af67cd93157401fb8
+K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
 ```
 
-### подлючаем воркер k8s-w1 (10.129.0.4)
+### подлючаем воркер k8s-w1 (10.128.0.30 ,    ru-central1-a)
 ```
 sudo hostnamectl set-hostname k8s-w1
 ```
@@ -233,8 +233,8 @@ sudo mkdir -p /etc/rancher/rke2
 ```
 ```
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
-server: https://10.130.0.25:9345
-token: K10d92839ebe7e26c54b06cff4c61a394d0701db0f38e6b453200b6aaa66cdcfe52::server:74d0ffe751f3231af67cd93157401fb8
+server: https://10.128.0.23:9345
+token: K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
 node-name: k8s-w1
 EOF
 sudo systemctl enable --now rke2-agent.service
@@ -277,8 +277,8 @@ curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sudo sh -
 ```
 sudo mkdir -p /etc/rancher/rke2
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
-server: https://10.130.0.25:9345
-token: K10d92839ebe7e26c54b06cff4c61a394d0701db0f38e6b453200b6aaa66cdcfe52::server:74d0ffe751f3231af67cd93157401fb8
+server: https://10.128.0.23:9345
+token: K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
 node-name: k8s-w2
 EOF
 sudo systemctl enable --now rke2-agent.service
@@ -319,8 +319,8 @@ sudo mkdir -p /etc/rancher/rke2
 ```
 ```
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
-server: https://10.130.0.25:9345
-token: K10d92839ebe7e26c54b06cff4c61a394d0701db0f38e6b453200b6aaa66cdcfe52::server:74d0ffe751f3231af67cd93157401fb8
+server: https://10.128.0.23:9345
+token: K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
 node-name: k8s-w3
 EOF
 sudo systemctl enable --now rke2-agent.service
@@ -361,8 +361,8 @@ curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sudo sh -
 ```
 sudo mkdir -p /etc/rancher/rke2
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<EOF
-server: https://10.130.0.25:9345
-token: K10d92839ebe7e26c54b06cff4c61a394d0701db0f38e6b453200b6aaa66cdcfe52::server:74d0ffe751f3231af67cd93157401fb8
+server: https://10.128.0.23:9345
+token: K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
 node-name: k8s-w4
 EOF
 sudo systemctl enable --now rke2-agent.service
