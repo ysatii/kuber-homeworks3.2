@@ -183,7 +183,7 @@ defaults
     timeout server  1m
 
 frontend kubernetes_api
-    bind 10.130.0.100:6443   # <— только VIP!
+    bind 10.128.0.100:6443   # <— только VIP!
     default_backend kubernetes_masters
 
 backend kubernetes_masters
@@ -214,7 +214,7 @@ vrrp_instance VI_1 {
     priority 103
     advert_int 1
 
-    unicast_src_ip 10.128.0.23
+    unicast_src_ip 10.128.0.23я
     unicast_peer {
         10.129.0.26
         10.130.0.7
@@ -419,6 +419,7 @@ sudo systemctl start keepalived
 ![рисунок 23](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img23.jpg)  
 ![рисунок 24](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img24.jpg)  
 ![рисунок 25](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img25.jpg)  
+
 
 
 
