@@ -204,7 +204,7 @@ kubectl get componentstatuses
 sudo cat /var/lib/rancher/rke2/server/node-token
 ```
 
-ответ
+### ответ
 ``` 
 K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
 ```
@@ -296,9 +296,9 @@ kubectl get pods -A -o wide
 ![рисунок 11](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_11.jpg)  
 ----
 
-k8s-w3 (10.129.0.15)
+### подлючаем воркер  k8s-w3 (10.130.0.12, ru-central1-d)
 ```
-ssh -l lamer 89.169.164.192
+ssh -l ubuntu 158.160.204.167
 ```
 
 ```
@@ -334,10 +334,14 @@ kubectl -n kube-system get pods -l k8s-app=canal -o wide
 kubectl get pods -A -o wide
 ```
 
-![рисунок 12](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_12.jpg)  
-![рисунок 13](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_13.jpg)  
-![рисунок 14](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_14.jpg)  
+![рисунок 12](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img12.jpg)  
+![рисунок 13](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img13.jpg)  
+![рисунок 14](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img14.jpg)  
 -----
+
+
+
+
 
 k8s-w4 (10.128.0.8)
 ```
