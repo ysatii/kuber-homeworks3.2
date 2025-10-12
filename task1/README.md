@@ -176,10 +176,10 @@ kubectl -n kube-system get pods -l k8s-app=canal -o wide
 
 ### Проверка kubelet и CRI (containerd)
 sudo systemctl status rke2-server | grep Active
-sudo crictl info | grep -i runtimeType
+sudo $(command -v crictl) info | grep -i runtimeType
 ```
-![рисунок 3](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_3.jpg)  
-![рисунок 4](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_4.jpg)  
+![рисунок 3](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img3.jpg)  
+![рисунок 4](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img4.jpg)  
 
 
 ```bash
