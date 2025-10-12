@@ -153,9 +153,9 @@ kubectl -n kube-system get pods -l component=etcd -o wide
 ```
 sudo cat /var/lib/rancher/rke2/server/node-token
 ```
-ответ K10d92839ebe7e26c54b06cff4c61a394d0701db0f38e6b453200b6aaa66cdcfe52::server:74d0ffe751f3231af67cd93157401fb8
+ответ K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
 -----
-![рисунок 2](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_2.jpg)  
+![рисунок 2](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img2.jpg)  
 
 ### 1️⃣ Проверка состояния нод
 
