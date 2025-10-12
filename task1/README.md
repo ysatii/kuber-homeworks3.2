@@ -185,7 +185,7 @@ sudo $(command -v crictl) info | grep -i runtimeType
 ```bash
 ### Проверка Kubernetes API
 kubectl cluster-info
-kubectl version --short0
+kubectl version
 
 ### Проверка системных сервисов
 kubectl get svc -A
@@ -196,7 +196,7 @@ kubectl run dns-test --image=busybox:1.28 --restart=Never -it -- nslookup kubern
 ### Проверка состояния компонентов
 kubectl get componentstatuses
 ```
-![рисунок 5](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_5.jpg)  
+![рисунок 5](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img5.jpg)  
 -----
 
 ## Подключение worker-нод к RKE2 (CNI=canal, CRI=containerd)
