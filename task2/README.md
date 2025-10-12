@@ -177,7 +177,7 @@ defaults
     timeout server  1m
 
 frontend kubernetes_api
-    bind 0.0.0.0:6443
+    bind 10.130.0.100:6443   # <— только VIP!
     default_backend kubernetes_masters
 
 backend kubernetes_masters
@@ -324,6 +324,72 @@ kubectl cluster-info
 ```
 
 Тест failover:
+
+kubectl cluster-info - выдает не верный сертификат!
+исправим 
+
+
+sudo sed -n '1,200p' /etc/rancher/rke2/config.yaml
+
+# если блока tls-san нет или в нём нет VIP — запишем точный конфиг:
+
+## Для  8s-m1 
+sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<'EOF'
+node-name: k8s-m1  
+cni: canal
+cluster-cidr: 10.42.0.0/16
+service-cidr: 10.43.0.0/16
+tls-san:
+  - 127.0.0.1
+  - ::1
+  - 10.130.0.25     # IP k8s-m1                                              
+  - 10.130.0.26      # IP k8s-m2
+  - 10.130.0.12       # IP k8s-m3
+  - 10.43.0.1        # ClusterIP kubernetes
+  - 10.128.0.100     # **VIP**
+  - k8s-m1           #  
+write-kubeconfig-mode: "0644"
+EOF
+
+
+## Для  8s-m2
+sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<'EOF'
+node-name: k8s-m2  
+cni: canal
+cluster-cidr: 10.42.0.0/16
+service-cidr: 10.43.0.0/16
+tls-san:
+  - 127.0.0.1
+  - ::1
+  - 10.130.0.25     # IP k8s-m1                                              
+  - 10.130.0.26      # IP k8s-m2
+  - 10.130.0.12       # IP k8s-m3
+  - 10.43.0.1        # ClusterIP kubernetes
+  - 10.128.0.100     # **VIP**
+  - k8s-m2           #  
+write-kubeconfig-mode: "0644"
+EOF
+
+
+## Для  8s-m3
+sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<'EOF'
+node-name: k8s-m3  
+cni: canal
+cluster-cidr: 10.42.0.0/16
+service-cidr: 10.43.0.0/16
+tls-san:
+  - 127.0.0.1
+  - ::1
+  - 10.130.0.25     # IP k8s-m1                                              
+  - 10.130.0.26      # IP k8s-m2
+  - 10.130.0.12       # IP k8s-m3
+  - 10.43.0.1        # ClusterIP kubernetes
+  - 10.128.0.100     # **VIP**
+  - k8s-m3           #  
+write-kubeconfig-mode: "0644"
+EOF
+
+
 
 # на текущем владельце VIP
 sudo systemctl stop keepalived

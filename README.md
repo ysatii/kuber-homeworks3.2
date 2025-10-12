@@ -19,7 +19,7 @@
 ## подготовка
 создадим необходимы машины в яндекс облаке 
 
-![рисунок 1](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_1.jpg)  
+![рисунок 1](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img1.jpg)  
 
 ## Задание 1. Установить кластер k8s с 1 master node
 

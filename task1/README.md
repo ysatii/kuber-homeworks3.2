@@ -6,8 +6,8 @@
 4. Способ установки выбрать самостоятельно.
 
 ## ответ 1
-
-# Отключить swap (требование Kubernetes)
+Создадим мастера 
+### Отключить swap (требование Kubernetes)
 
 ```
 sudo swapoff -a
@@ -15,7 +15,7 @@ sudo sed -ri '/\sswap\s/s/^/#/' /etc/fstab
 ```
 -----
 
-# Загрузить необходимые модули ядра
+### Загрузить необходимые модули ядра
 ```
 cat <<'EOF' | sudo tee /etc/modules-load.d/rke2.conf
 br_netfilter
@@ -26,7 +26,7 @@ sudo modprobe overlay
 ```
 -----
 
-# Настройки сетевого стека
+### Настройки сетевого стека
 
 ```
 cat <<'EOF' | sudo tee /etc/sysctl.d/99-rke2.conf
@@ -49,7 +49,7 @@ curl -sfL https://get.rke2.io | sudo sh -
 sudo systemctl enable rke2-server.service
 ```
 
-ancher/rke2
+конфигураци яancher/rke2
 
 ```
 sudo mkdir -p /etc/rancher/rke2
@@ -59,8 +59,8 @@ node-name: k8s-m1
 
 # Разрешённые SAN'ы для TLS
 tls-san:
-  - 51.250.36.28       # публичный IP
-  - 10.130.0.25        # внутренний IPostname
+  - 158.160.61.54      # публичный IP
+  - 10.128.0.23      # внутренний IPostname
 
 # Явно указываем CNI
 cni: canal
@@ -82,30 +82,36 @@ sudo systemctl start rke2-server.service
 sudo journalctl -u rke2-server -f
 ```
 
-дожидаемся строки в логах
+### дожидаемся строки в логах
 Started rke2-server.service - Rancher Kubernetes Engine v2
 -----
 
 4. Подключение kubectl и проверка состояния
 ### Добавляем RKE2 бинарники в PATH
+```
 echo 'export PATH=$PATH:/var/lib/rancher/rke2/bin' | tee -a ~/.bashrc
 source ~/.bashrc
+```
 
 ### kubeconfig для kubectl
+```
 mkdir -p ~/.kube
 sudo cp /etc/rancher/rke2/rke2.yaml ~/.kube/config
 sudo chown $(id -u):$(id -g) ~/.kube/config
+```
 
 ### Проверяем состояние ноды и системных подов
+```
 kubectl get nodes -o wide
 kubectl -n kube-system get pods -o wide
+```
 -----
 
 5. Проверка CRI и etcd
 ### Проверяем что используется containerd
 ```
-mkdir -p /etc/crictl.yaml
-tee /etc/crictl.yaml >/dev/null <<EOF
+sudo rm -rf /etc/crictl.yaml   # на всякий случай
+sudo tee /etc/crictl.yaml >/dev/null <<EOF
 runtime-endpoint: unix:///run/k3s/containerd/containerd.sock
 image-endpoint: unix:///run/k3s/containerd/containerd.sock
 timeout: 10
@@ -114,7 +120,9 @@ EOF
 ```
 
 ```
-crictl info | grep -i runtimeType
+command -v crictl
+# запустим crictl с sudo, указывая полный путь
+sudo $(command -v crictl) info | grep -i runtimeType
 ```
 
 получаем ответ 
@@ -123,6 +131,16 @@ crictl info | grep -i runtimeType
         "runtimeType": "io.containerd.runhcs.v1",
 ```
 containerd присутвует !
+
+
+
+или 
+```
+sudo apt update && sudo apt install -y acl
+# Выдать права на сокет текущему пользователю (до перезапуска)
+sudo setfacl -m u:$USER:rw /run/k3s/containerd/containerd.sock
+crictl info | grep -i runtimeType
+```
 -----
 
 ### Проверяем работу etcd
@@ -157,8 +175,8 @@ kubectl -n kube-system logs -l component=etcd --tail=20
 kubectl -n kube-system get pods -l k8s-app=canal -o wide
 
 ### Проверка kubelet и CRI (containerd)
-systemctl status rke2-server | grep Active
-crictl info | grep -i runtimeType
+sudo systemctl status rke2-server | grep Active
+sudo crictl info | grep -i runtimeType
 ```
 ![рисунок 3](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_3.jpg)  
 ![рисунок 4](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_4.jpg)  
@@ -182,13 +200,16 @@ kubectl get componentstatuses
 -----
 
 ## Подключение worker-нод к RKE2 (CNI=canal, CRI=containerd)
- cat /var/lib/rancher/rke2/server/node-token
+```
+sudo cat /var/lib/rancher/rke2/server/node-token
+```
+
 ответ
 ``` 
 K10d92839ebe7e26c54b06cff4c61a394d0701db0f38e6b453200b6aaa66cdcfe52::server:74d0ffe751f3231af67cd93157401fb8
 ```
 
-### подлючаем воркер 8s-w1 (10.129.0.4)
+### подлючаем воркер k8s-w1 (10.129.0.4)
 ```
 sudo hostnamectl set-hostname k8s-w1
 ```
