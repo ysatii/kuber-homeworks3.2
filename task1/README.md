@@ -253,9 +253,9 @@ kubectl get pods -A -o wide
 ![рисунок 8](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img8.jpg)  
 -----
 
-### подлючаем k8s-w2 (10.128.0.10)
+### подлючаем k8s-w2 (10.128.0.10, ru-central1-b)
 ```
-ssh -l lamer 62.84.113.3
+ssh -l ubuntu 158.160.25.160
 ```
 
 ```
