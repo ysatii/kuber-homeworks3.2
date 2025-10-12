@@ -209,7 +209,7 @@ sudo cat /var/lib/rancher/rke2/server/node-token
 K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
 ```
 
-### подлючаем воркер k8s-w1 (10.128.0.30 ,    ru-central1-a)
+### подлючаем воркер k8s-w1 (10.128.0.30, ru-central1-a)
 ```
 sudo hostnamectl set-hostname k8s-w1
 ```
@@ -240,15 +240,17 @@ EOF
 sudo systemctl enable --now rke2-agent.service
 ```
 
-![рисунок 6](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_6.jpg)  
-![рисунок 7](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_7.jpg)  
+![рисунок 6](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img6.jpg)  
+![рисунок 7](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img7.jpg)  
+
+
 
 ```
 kubectl get nodes -o wide
 kubectl -n kube-system get pods -l k8s-app=canal -o wide
 kubectl get pods -A -o wide
 ```
-![рисунок 8](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_8.jpg)  
+![рисунок 8](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img8.jpg)  
 -----
 
 ### подлючаем k8s-w2 (10.128.0.10)
