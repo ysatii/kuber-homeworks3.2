@@ -68,40 +68,13 @@ kubectl get pods -A -o wide
 ![рисунок 18](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img18.jpg)  
 ![рисунок 19](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img19.jpg)  
 -----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Подключаем k8s-m3
+### Подключаем k8s-m3
 
 На k8s-m3 выполняем аналогично:
 
 ### 1. Подготовка
 ```
-ssh -l lamer 158.160.144.5
+ssh -l lamer 158.160.202.198
 ```
 ```
 sudo hostnamectl set-hostname k8s-m3
@@ -127,7 +100,7 @@ sudo mkdir -p /etc/rancher/rke2
 ### 3. Конфиг
 ```
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<'EOF'
-server: https://10.130.0.25:9345
+server: https://10.128.0.23:9345
 token: K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
 
 node-name: k8s-m3
@@ -135,10 +108,10 @@ cni: canal
 cluster-cidr: 10.42.0.0/16
 service-cidr: 10.43.0.0/16
 tls-san:
-  - 10.128.0.18
-  - 10.130.0.30
-  - 10.130.0.36
-  - 10.128.0.100
+  - 10.128.0.23      # k8s-m1
+  - 10.129.0.26      # k8s-m2
+  - 10.130.0.7       # k8s-m3
+  - 10.128.0.100     # будущий VIP
   - k8s-m3
 write-kubeconfig-mode: "0644"
 EOF
@@ -156,12 +129,17 @@ kubectl -n kube-system get pods -l k8s-app=canal -o wide
 kubectl get pods -A -o wide
 ```
 
-![рисунок 20](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_20.jpg)  
-![рисунок 21](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_21.jpg)  
+![рисунок 20](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img20.jpg)  
+![рисунок 21](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img21.jpg)  
 -----
+## Кластер собран
+## настроены 4 рабочих ноды и 3 управляющих
 
 
-Работаем с настройками кластреа в режиме HA и ставим keepalived
+
+
+
+## Работаем с настройками кластреа в режиме HA и ставим keepalived
 
 0) Проверим интерфейс и добавим VIP в SAN (на каждом master)
 ### имя сетевого интерфейса (обычно eth0)
