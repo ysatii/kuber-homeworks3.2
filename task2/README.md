@@ -7,10 +7,10 @@
 # Ответ 2
 
 ## подключаем еще две мастер ноды к кластеру  
-Подключаем k8s-m2
+### Подключаем k8s-m2 ()
 ### 1. Базовая подготовка
 ```
-ssh -l lamer 158.160.198.74
+ssh -l ubuntu 89.169.171.232
 ```
 ```
 sudo hostnamectl set-hostname k8s-m2
@@ -36,17 +36,17 @@ sudo mkdir -p /etc/rancher/rke2
 ### 3. Конфиг кластера
 ```
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<'EOF'
-server: https://10.130.0.25:9345
-token: K10d92839ebe7e26c54b06cff4c61a394d0701db0f38e6b453200b6aaa66cdcfe52::server:74d0ffe751f3231af67cd93157401fb8
+server: https://10.128.0.23:9345
+token: K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
 
 node-name: k8s-m2
 cni: canal
 cluster-cidr: 10.42.0.0/16
 service-cidr: 10.43.0.0/16
 tls-san:
-  - 10.130.0.25      # k8s-m1
-  - 10.130.0.26      # k8s-m2
-  - 10.130.0.12      # k8s-m3
+  - 10.128.0.23      # k8s-m1
+  - 10.129.0.26      # k8s-m2
+  - 10.130.0.7       # k8s-m3
   - 10.128.0.100     # будущий VIP
   - k8s-m2
 write-kubeconfig-mode: "0644"
@@ -64,10 +64,36 @@ kubectl get nodes -o wide
 kubectl -n kube-system get pods -l k8s-app=canal -o wide
 kubectl get pods -A -o wide
 ```
-![рисунок 17](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_17.jpg)  
-![рисунок 18](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_18.jpg)  
-![рисунок 19](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_19.jpg)  
+![рисунок 17](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img17.jpg)  
+![рисунок 18](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img18.jpg)  
+![рисунок 19](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img19.jpg)  
 -----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Подключаем k8s-m3
 
@@ -102,7 +128,7 @@ sudo mkdir -p /etc/rancher/rke2
 ```
 sudo tee /etc/rancher/rke2/config.yaml >/dev/null <<'EOF'
 server: https://10.130.0.25:9345
-token: K10d92839ebe7e26c54b06cff4c61a394d0701db0f38e6b453200b6aaa66cdcfe52::server:74d0ffe751f3231af67cd93157401fb8
+token: K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
 
 node-name: k8s-m3
 cni: canal
