@@ -153,7 +153,10 @@ kubectl -n kube-system get pods -l component=etcd -o wide
 ```
 sudo cat /var/lib/rancher/rke2/server/node-token
 ```
-### ответ K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
+### ответ
+```
+ K10d2cedb6e1d6d99409b2de45def60b0b54d09a679288183f4d91850550a60e53a::server:d31c00d46216c9474a63bc29d50814ae
+```
 -----
 ![рисунок 2](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img2.jpg)  
 
@@ -224,7 +227,7 @@ net.ipv4.ip_forward=1
 EOF
 sudo sysctl --system
 ```
-# установка агента
+### установка агента
 ```
 curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sudo sh -
 ```
@@ -340,12 +343,9 @@ kubectl get pods -A -o wide
 -----
 
 
-
-
-
-k8s-w4 (10.128.0.8)
+k8s-w4 (10.128.0.34, ru-central1-a)
 ```
-ssh -l lamer 158.160.42.77
+ssh -l lamer 158.160.50.83
 ```
 
 ```
@@ -381,8 +381,7 @@ kubectl -n kube-system get pods -l k8s-app=canal -o wide
 kubectl get pods -A -o wide
 ```
 
-![рисунок 15](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_15.jpg)  
-![рисунок 16](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img_16.jpg)  
- 
- -----
+![рисунок 15](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img15.jpg)  
+![рисунок 16](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img16.jpg)  
+-----
  
