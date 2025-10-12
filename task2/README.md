@@ -158,8 +158,10 @@ sudo sed -i '/^tls-san:/a\  - 10.128.0.100' /etc/rancher/rke2/config.yaml
 ```
 sudo systemctl restart rke2-server
 ```
+-----
 
 
+## Установить haproxy + keepalived (на всех master)
 1) Установить haproxy + keepalived (на всех master)
 ```
 sudo apt-get update
@@ -188,9 +190,9 @@ backend kubernetes_masters
     mode tcp
     option tcp-check
     balance roundrobin
-    server k8s-m1 10.130.0.25:6443 check fall 3 rise 2
-    server k8s-m2 10.130.0.26:6443 check fall 3 rise 2
-    server k8s-m3 10.130.0.12:6443 check fall 3 rise 2
+    server k8s-m1 10.128.0.23:6443 check fall 3 rise 2
+    server k8s-m2 10.129.0.26:6443 check fall 3 rise 2
+    server k8s-m3 10.130.0.7:6443 check fall 3 rise 2
 EOF
 ```
 ```
@@ -212,10 +214,10 @@ vrrp_instance VI_1 {
     priority 103
     advert_int 1
 
-    unicast_src_ip 10.130.0.25
+    unicast_src_ip 10.128.0.23
     unicast_peer {
-        10.130.0.26
-        10.130.0.12
+        10.129.0.26
+        10.130.0.7
     }
 
     authentication {
@@ -246,10 +248,10 @@ vrrp_instance VI_1 {
     priority 102
     advert_int 1
 
-    unicast_src_ip 10.130.0.26
+    unicast_src_ip 10.129.0.26
     unicast_peer {
-        10.130.0.25
-        10.130.0.12
+        10.128.0.23
+        10.130.0.7
     }
 
     authentication {
@@ -281,10 +283,10 @@ vrrp_instance VI_1 {
     priority 101
     advert_int 1
 
-    unicast_src_ip 10.130.0.12
+    unicast_src_ip 10.130.0.7
     unicast_peer {
-        10.130.0.25
-        10.130.0.26
+        10.129.0.26
+        10.128.0.23
     }
 
     authentication {
@@ -304,7 +306,7 @@ sudo systemctl enable --now keepalived
 ```
 
 4) Проверки VIP и балансировки
-# на любом мастере
+# на любом мастере  
 ```
 ip a | grep -A1 10.128.0.100
 ```
@@ -316,10 +318,15 @@ valid_lft forever preferred_lft forever
 -----
 
 
+
 # API по VIP:
 ```
 curl -k https://10.128.0.100:6443/healthz
 ```
+# на облаках машины стоят за програмными ваервоалами и мы не сможем проверить keepalived в полной мере 
+
+
+![рисунок 22](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img22.jpg)  
 
 # kubectl через VIP (на админ-хосте, где лежит ~/.kube/config):
 ```
@@ -329,7 +336,7 @@ kubectl cluster-info
 
 Тест failover:
 
-kubectl cluster-info - выдает не верный сертификат!
+# если kubectl cluster-info - выдает не верный сертификат!
 исправим 
 
 
@@ -346,9 +353,9 @@ service-cidr: 10.43.0.0/16
 tls-san:
   - 127.0.0.1
   - ::1
-  - 10.130.0.25     # IP k8s-m1                                              
-  - 10.130.0.26      # IP k8s-m2
-  - 10.130.0.12       # IP k8s-m3
+  - 10.128.0.23      # IP k8s-m1                                              
+  - 10.129.0.26      # IP k8s-m2
+  - 10.130.0.7       # IP k8s-m3
   - 10.43.0.1        # ClusterIP kubernetes
   - 10.128.0.100     # **VIP**
   - k8s-m1           #  
@@ -365,9 +372,9 @@ service-cidr: 10.43.0.0/16
 tls-san:
   - 127.0.0.1
   - ::1
-  - 10.130.0.25     # IP k8s-m1                                              
-  - 10.130.0.26      # IP k8s-m2
-  - 10.130.0.12       # IP k8s-m3
+  - 10.128.0.23      # IP k8s-m1                                              
+  - 10.129.0.26      # IP k8s-m2
+  - 10.130.0.7       # IP k8s-m3
   - 10.43.0.1        # ClusterIP kubernetes
   - 10.128.0.100     # **VIP**
   - k8s-m2           #  
@@ -384,9 +391,9 @@ service-cidr: 10.43.0.0/16
 tls-san:
   - 127.0.0.1
   - ::1
-  - 10.130.0.25     # IP k8s-m1                                              
-  - 10.130.0.26      # IP k8s-m2
-  - 10.130.0.12       # IP k8s-m3
+  - 10.128.0.23      # IP k8s-m1                                              
+  - 10.129.0.26      # IP k8s-m2
+  - 10.130.0.7       # IP k8s-m3
   - 10.43.0.1        # ClusterIP kubernetes
   - 10.128.0.100     # **VIP**
   - k8s-m3           #  
@@ -408,6 +415,13 @@ curl -k https://10.128.0.100:6443/healthz
 ```
 sudo systemctl start keepalived
 ```
+
+![рисунок 23](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img23.jpg)  
+![рисунок 24](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img24.jpg)  
+![рисунок 25](https://github.com/ysatii/kuber-homeworks3.2/blob/main/img/img25.jpg)  
+
+
+
 
 
 
